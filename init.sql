@@ -1,0 +1,50 @@
+CREATE TABLE IF NOT EXISTS Client (
+	id serial primary key,
+	documentNumber varchar(50) not null,
+	documentType varchar(10) not null,
+	email varchar(100),
+	firstName varchar(100),
+	lastName varchar(100),
+	addres varchar(100),
+	phone varchar(20),
+	username varchar(100) not null unique,
+	password varchar(100) not null
+);
+
+CREATE TABLE IF NOT EXISTS VehicleType (
+	id serial primary key,
+	name varchar(50) not null,
+	segment varchar(50)
+);
+
+CREATE TABLE IF NOT EXISTS Vehicle (
+	licensePlate varchar(10) primary key unique,
+	brand varchar(20),
+	color varchar(20),
+	manufactureYear integer,
+	model varchar(20),
+	rentalStatus varchar(20),
+	dailyRate decimal,
+	currentMileage integer,
+	trasmission varchar(20),
+	seatingCapacity integer,
+	doors integer,
+	status boolean,
+	vehicleType integer not null,
+	foreign key (vehicleType) references VehicleType(id)
+);
+
+CREATE TABLE IF NOT EXISTS Rental (
+	id serial primary key,
+	rentalDateStart TIMESTAMPTZ not null,
+	rentalDateEnd TIMESTAMPTZ not null,
+	totalAmount decimal,
+	statusRental varchar(20),
+	idVehicle varchar(10) not null,
+	idClient integer not null,
+	foreign key (idVehicle) references Vehicle(licensePlate),
+	foreign key (idClient) references Client(id)
+);
+
+INSERT INTO Client (documentNumber, documentType, email, firstName, lastName, addres, phone, username, password)
+VALUES ('1028475661', 'CC', 'juan.perez@example.com', 'JUAN', 'PEREZ', 'Calle 123 #45-67, Bogotá', '3004567890', 'juanperez1', 'MiClaveSegura123');

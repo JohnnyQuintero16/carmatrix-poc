@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        //mavenLocal()
+        //maven { url = '...' }
+        gradlePluginPortal()
+    }
+}
+
+buildCache {
+    local {
+        directory = new File(rootDir, 'build-cache')
+    }
+}
+
+rootProject.name = 'ms-user'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ':jpa-repository'
+project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')
+include ':user-rest'
+project(':user-rest').projectDir = file('./infrastructure/entry-points/user-rest')
+include ':controller-advice'
+project(':controller-advice').projectDir = file('./infrastructure/entry-points/controller-advice')
