@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-map-carmatrix
+  namespace: carmatrix
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://database-carmatrix:5432/carmatrix
