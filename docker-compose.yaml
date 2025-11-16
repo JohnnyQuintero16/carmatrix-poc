@@ -31,6 +31,26 @@ services:
     networks:
       - network_carmatrix
     restart: unless-stopped
+  
+  ms-vehicle-carmatrix:
+    container_name: ms-vehicle-carmatrix
+    depends_on:
+      - database-carmatrix
+    build:
+      context: ./ms-vehicle
+      dockerfile: deployment/Dockerfile
+    environment:
+      SPRING_DATASOURCE_HOST: database-carmatrix
+      SPRING_DATASOURCE_PORT: 5432
+      SPRING_DATASOURCE_DATABASE: carmatrix
+      SPRING_DATASOURCE_SCHEMA: public
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+    ports:
+      - "8083:8083"
+    networks:
+      - network_carmatrix
+    restart: unless-stopped
 
 networks:
   network_carmatrix:
