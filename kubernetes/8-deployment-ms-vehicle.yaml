@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-vehicle-carmatrix
+  namespace: carmatrix
+  labels:
+    app: ms-vehicle-carmatrix
+spec:
+  replicas: 1
+  selector:
+    matchLabels: ms-vehicle-carmatrix
+  template:
+    metadata:
+      labels:
+        app: ms-vehicle-carmatrix
+    spec:
+      containers:
+        - name: ms-vehicle-carmatrix
+          image: johnnyquinteror16/ms-vehicle-carmatrix:latest
+          ports:
+            - containerPort: 8083
+          env:
+            - name: SPRING_DATASOURCE_HOST
+              value: "database-carmatrix"
+            - name: SPRING_DATASOURCE_PORT
+              value: 5432
+            - name: SPRING_DATASOURCE_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: secret-carmatrix
+                  key: POSTGRES_DB
+            - name: SPRING_DATASOURCE_SCHEMA
+              value: "public"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef: 
+                  name: secret-carmatrix
+                  key: POSTGRES_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret-carmatrix
+                  key: POSTGRES_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: carmatrix
+  name: ms-vehicle-carmatrix
+  labels:
+    app: ms-vehicle-carmatrix
+  spec:
+    type: nodePort
+    selector:
+      app: ms-vehicle-carmatrix
+    port:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083
+      nodePort: 30083
+  
